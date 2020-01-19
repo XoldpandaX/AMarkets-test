@@ -1,0 +1,25 @@
+@import 'src/assets/styles/base/variables';
+
+.form-wizard {
+  display: flex;
+  // align-items: center; undefined need or not
+  min-height: 420px;
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+  }
+
+  &__info {
+    max-width: 35%;
+    width: 100%;
+
+    @media (max-width: 576px) {
+      max-width: 100%;
+      margin-bottom: 15px;
+    }
+  }
+
+  &__forms {
+    flex: 1;
+  }
+}
