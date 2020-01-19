@@ -1,3 +1,5 @@
+import { PAYMENT_TYPES } from '@/constants';
+
 const commonSizes = {
   labelCol: {
     xs: { span: 24 },
@@ -106,12 +108,12 @@ export default {
       selectOptions: [
         {
           id: '1a',
-          value: 'cash',
+          value: PAYMENT_TYPES.CASH,
           description: 'Оплата наличными',
         },
         {
           id: '2a',
-          value: 'card',
+          value: PAYMENT_TYPES.CREDIT_CARD,
           description: 'Оплата картой',
         },
       ],

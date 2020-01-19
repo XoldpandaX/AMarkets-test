@@ -6,7 +6,10 @@
       :selected-performance-schedule="performanceSchedule"
       @select="handleSelect"
     />
-    <form-fields-user-info v-if="isSecondStep" />
+    <form-fields-user-info
+      v-if="isSecondStep"
+      @payment-change="handlePaymentChange"
+    />
   </form-wizard>
 </template>
 
@@ -48,10 +51,17 @@ export default {
     },
   },
   methods: {
-    ...mapActions('schedule', ['setSelectedPerformanceId', 'makeStep']),
+    ...mapActions('schedule', [
+      'setSelectedPerformanceId',
+      'makeStep',
+      'changePaymentType',
+    ]),
 
     async handleSelect(performanceId) {
       await this.setSelectedPerformanceId({ performanceId });
+    },
+    async handlePaymentChange(paymentType) {
+      await this.changePaymentType({ type: paymentType });
     },
     async handleSubmit(formValues) {
       console.info(formValues);

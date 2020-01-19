@@ -1,6 +1,7 @@
+import { PAYMENT_TYPES } from '@/constants';
+
 export default {
   theaterSchedule: ({ theaterSchedule }) => theaterSchedule,
-  isInitDataLoading: ({ isInitDataLoading }) => isInitDataLoading,
   selectedPerformanceId: ({ selectedPerformanceId }) => selectedPerformanceId,
   performanceSchedule: ({ theaterSchedule }, { selectedPerformanceId }) => (
     selectedPerformanceId
@@ -9,4 +10,8 @@ export default {
   ),
   currentWizardStepIdx: ({ currentWizardStep }) => currentWizardStep,
   wizardStepsQuantity: ({ wizardStepsQuantity }) => wizardStepsQuantity,
+
+  // predicates
+  isInitDataLoading: ({ isInitDataLoading }) => isInitDataLoading,
+  isCardPayment: ({ paymentType }) => paymentType === PAYMENT_TYPES.CREDIT_CARD,
 };

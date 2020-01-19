@@ -1,7 +1,10 @@
 <template>
   <div>
     <form-input-fields :fields="fieldsOfForm.inputFields" />
-    <form-special-fields :fields="fieldsOfForm.specialFields" />
+    <form-special-fields
+      :fields="fieldsOfForm.specialFields"
+      @payment-change="handlePaymentChange"
+    />
     <form-tail-fields :fields="fieldsOfForm.tailFields" />
   </div>
 </template>
@@ -48,6 +51,9 @@ export default {
           console.log('Received values of form: ', values);
         }
       });
+    },
+    handlePaymentChange(paymentType) {
+      this.$emit('payment-change', paymentType);
     },
   },
 };
