@@ -21,7 +21,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { FORM_WIZARD_STEPS, WIZARD_STEPS_DIRECTIONS } from '@/constants';
+import { FORM_WIZARD_STEPS, PAYMENT_TYPES } from '@/constants';
 
 import { FormFieldsUserInfo } from '../form-fields-user-info';
 import { FormWizard } from '../form-wizard';
@@ -38,26 +38,20 @@ export default {
   },
   created() {
     // check for saved payment card prop from store
-    this.wizardSteps = Object.values(FORM_WIZARD_STEPS);
+    this.initWizardStepIdx();
   },
   data() {
     return {
-      wizardSteps: Object.values(FORM_WIZARD_STEPS),
+      wizardSteps: null,
       currentStepIdx: 0,
       isPaymentStepActive: false,
     };
   },
   computed: {
-    ...mapGetters('schedule', [
-      'theaterSchedule',
-      'performanceSchedule',
-      'currentWizardStepIdx',
-      'wizardStepsQuantity',
-      'currentWizardStepIdx',
-    ]),
+    ...mapGetters('schedule', ['theaterSchedule', 'performanceSchedule']),
 
     currentStepName() {
-      return this.wizardSteps[this.currentWizardStepIdx].NAME;
+      return this.wizardSteps[this.currentStepIdx].NAME;
     },
     isFirstStep() {
       return this.currentStepName === FORM_WIZARD_STEPS.SCHEDULE.NAME;
@@ -68,37 +62,52 @@ export default {
     isThirdStep() {
       return this.currentStepName === FORM_WIZARD_STEPS.CREDIT_CARD.NAME;
     },
+    totalSteps() {
+      // for easy comparing with arr index which starts from 0
+      return this.wizardSteps.length - 1;
+    },
 
     // form nav btns availability
     isForwardBtnAvailable() {
-      return this.currentWizardStepIdx === this.wizardStepsQuantity;
+      return this.currentStepIdx === this.totalSteps;
     },
     isBackwardBtnAvailable() {
-      return !this.currentWizardStepIdx > 0;
+      return !this.currentStepIdx > 0;
     },
   },
   methods: {
-    ...mapActions('schedule', [
-      'setSelectedPerformanceId',
-      'makeStep',
-      'changePaymentType',
-      'makeStep',
-    ]),
+    ...mapActions('schedule', ['setSelectedPerformanceId']),
 
+    initWizardStepIdx() {
+      const stepKeys = Object.values(FORM_WIZARD_STEPS);
+
+      this.wizardSteps = this.isPaymentStepActive
+        ? stepKeys
+        : stepKeys.filter(({ NAME }) => NAME !== FORM_WIZARD_STEPS.CREDIT_CARD.NAME);
+    },
+    stepForward() {
+      if (this.currentStepIdx < this.totalSteps) {
+        this.currentStepIdx += 1;
+      }
+    },
+    stepBackward() {
+      if (this.currentStepIdx > 0) {
+        this.currentStepIdx -= 1;
+      }
+    },
     async handleSelect(performanceId) {
       await this.setSelectedPerformanceId({ performanceId });
     },
     async handlePaymentChange(paymentType) {
-      await this.changePaymentType({ type: paymentType });
+      this.isPaymentStepActive = paymentType === PAYMENT_TYPES.CREDIT_CARD;
+      this.initWizardStepIdx();
     },
     async handleSubmit(formValues) {
       console.info(formValues);
-      await this.makeStep({ stepDirection: WIZARD_STEPS_DIRECTIONS.FORWARD });
+      this.stepForward();
     },
-
-    // step
     async handleBackwardClick() {
-      await this.makeStep({ stepDirection: WIZARD_STEPS_DIRECTIONS.BACKWARD });
+      this.stepBackward();
     },
   },
 };

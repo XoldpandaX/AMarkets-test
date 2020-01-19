@@ -1,9 +1,7 @@
 export default {
   theaterSchedule: null,
   selectedPerformanceId: '',
-  currentWizardStep: 0,
-  allWizardSteps: [],
-  wizardStepsQuantity: null,
+  initWizardStepIdxIdx: 0,
   isInitDataLoading: false,
   isCardPayment: false,
   paymentType: '',

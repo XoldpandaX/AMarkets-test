@@ -8,7 +8,7 @@ export default {
       ? theaterSchedule.filter(({ id }) => selectedPerformanceId === id)[0].sessions
       : []
   ),
-  currentWizardStepIdx: ({ currentWizardStep }) => currentWizardStep,
+  initWizardStepIdxIdxIdx: ({ initWizardStepIdxIdx }) => initWizardStepIdxIdx,
   wizardStepsQuantity: ({ wizardStepsQuantity }) => wizardStepsQuantity,
 
   // predicates
