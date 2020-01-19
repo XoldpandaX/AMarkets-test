@@ -10,21 +10,31 @@
         @submit="handleSubmit"
       >
         <slot /> <!-- place here form fields(inputs, textarea, date-pickers etc...) -->
-        <container-form-wizard-nav-btns />
+        <form-wizard-nav-btns
+          :is-backward-btn-active="isBackwardBtnActive"
+          :is-forward-btn-active="isForwardBtnActive"
+          @backward-click="$emit('backward-click')"
+        />
       </a-form>
     </div>
   </div>
 </template>
 
 <script>
+import VueTypes from 'vue-types';
+
 import { Form } from 'ant-design-vue';
-import { ContainerFormWizardNavBtns } from '../container-form-wizard-nav-btns';
+import { FormWizardNavBtns } from '../form-wizard-nav-btns';
 
 export default {
   name: 'form-wizard-wrapper',
   components: {
     AForm: Form,
-    ContainerFormWizardNavBtns,
+    FormWizardNavBtns,
+  },
+  props: {
+    isBackwardBtnActive: VueTypes.bool.required,
+    isForwardBtnActive: VueTypes.bool.required,
   },
   created() {
     this.form = this.$form.createForm(this, { name: 'coordinated' });
