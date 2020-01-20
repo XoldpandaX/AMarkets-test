@@ -69,7 +69,7 @@ export default {
     },
     {
       id: 'email',
-      label: 'Электронная почта',
+      label: 'Почта',
       placeholder: 'Ваша электронная почта',
       formItemLayout: commonSizes,
       decorator: [

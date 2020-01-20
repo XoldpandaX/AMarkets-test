@@ -1,6 +1,6 @@
 import get from 'lodash.get';
 import * as mutationTypes from './mutation-types';
-import { FORM_WIZARD_STEPS } from '@/constants';
+import { FORM_WIZARD_STEPS, LOCAL_STORAGE } from '@/constants';
 import { getPerformances, getSessions } from './services';
 import { mapSchedule, mapFormDataForSending } from './mappers';
 import { withLoader } from '@/utils';
@@ -27,7 +27,7 @@ async function init({ commit, dispatch }, { isErrorExist = false } = {}) {
   try {
     await dispatch('fetchTheaterSchedule', { isErrorExist });
 
-    const saveFormData = JSON.parse(localStorage.getItem('wizardForm'));
+    const saveFormData = JSON.parse(localStorage.getItem(LOCAL_STORAGE.WIZARD_FORM_KEY));
     if (saveFormData) {
       const startStepIdx = get(saveFormData, 'currentStepIdx', 0);
       // To know is third step(credit card details) is available
@@ -44,7 +44,7 @@ async function init({ commit, dispatch }, { isErrorExist = false } = {}) {
   }
 }
 
-function sendFormData({ getters }, { isCardPayment }) {
+async function sendFormData({ getters, dispatch }, { isCardPayment }) {
   const data = mapFormDataForSending({
     isCardPayment,
     // in case of not is credit-card payment(cash)
@@ -53,6 +53,7 @@ function sendFormData({ getters }, { isCardPayment }) {
     selectedPerformanceSchedules: getters.performanceSchedule,
   });
   console.info(data);
+  await dispatch('resetSavedData');
 }
 
 async function changePaymentType({ dispatch }, { type }) {
@@ -77,7 +78,12 @@ function saveFormInfo({ commit, getters }, { formField = {}, currentStepIdx }) {
     formField: { ...formField, currentStepIdx },
   });
 
-  localStorage.setItem('wizardForm', JSON.stringify(getters.savedFormFields));
+  localStorage.setItem(LOCAL_STORAGE.WIZARD_FORM_KEY, JSON.stringify(getters.savedFormFields));
+}
+
+function resetSavedData({ commit }) {
+  console.info(commit);
+  localStorage.removeItem(LOCAL_STORAGE.WIZARD_FORM_KEY);
 }
 
 export default {
@@ -92,4 +98,5 @@ export default {
   changePaymentType,
   saveFormInfo,
   sendFormData,
+  resetSavedData,
 };

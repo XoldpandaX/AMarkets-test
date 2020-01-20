@@ -9,13 +9,20 @@
     flex-direction: column;
   }
 
-  &__info {
+  /deep/ &__info {
+    text-align: right;
     max-width: 35%;
     width: 100%;
+    padding-right: 3.5%;
 
     @media (max-width: 576px) {
       max-width: 100%;
       margin-bottom: 15px;
+    }
+
+    &-description {
+      margin-top: 15px;
+      font-style: italic;
     }
   }
 

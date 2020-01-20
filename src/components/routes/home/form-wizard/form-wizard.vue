@@ -1,8 +1,6 @@
 <template>
   <div class="form-wizard">
-    <div class="form-wizard__info">
-      hello
-    </div>
+    <form-wizard-info :current-step-name="currentStepName" />
     <div class="form-wizard__forms">
       <a-form
         :form="form"
@@ -31,12 +29,14 @@ import { FORM_WIZARD_STEPS } from '@/constants';
 import { getSavedfieldsForStep } from '@/utils';
 
 import { FormWizardNavBtns } from '../form-wizard-nav-btns';
+import FormWizardInfo from './form-wizard-info.vue';
 
 export default {
   name: 'form-wizard-wrapper',
   components: {
     AForm: Form,
     FormWizardNavBtns,
+    FormWizardInfo,
   },
   props: {
     isBackwardBtnActive: VueTypes.bool.required,
