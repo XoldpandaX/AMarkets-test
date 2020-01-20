@@ -12,7 +12,7 @@
         v-if="field.type === 'performance'"
         v-decorator="field.decorator"
         :placeholder="field.placeholder"
-        @change="handleChange"
+        @change="handlePerformanceChange"
       >
         <a-select-option
           v-for="performance in performances"
@@ -34,7 +34,10 @@
           <a-select-option
             v-for="schedule in selectedPerformanceSchedule"
             :key="schedule.id"
-            :value="schedule.attributes.from"
+            :value="formatScheduleBorders(
+              schedule.attributes.from,
+              schedule.attributes.to,
+            )"
           >
             {{ formatScheduleBorders(schedule.attributes.from, schedule.attributes.to) }}
           </a-select-option>
@@ -75,8 +78,8 @@ export default {
     },
   },
   methods: {
-    handleChange(val) {
-      this.$emit('select', val);
+    handlePerformanceChange(val) {
+      this.$emit('performance-select', val);
     },
     formatScheduleBorders(from, to) {
       return `с ${from} до ${to}`;

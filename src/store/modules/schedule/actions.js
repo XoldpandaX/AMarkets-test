@@ -1,7 +1,8 @@
 import get from 'lodash.get';
 import * as mutationTypes from './mutation-types';
+import { FORM_WIZARD_STEPS } from '@/constants';
 import { getPerformances, getSessions } from './services';
-import { mapSchedule } from './mappers';
+import { mapSchedule, mapFormDataForSending } from './mappers';
 import { withLoader } from '@/utils';
 
 async function fetchTheaterSchedule({ commit }, { isErrorExist = false } = {}) {
@@ -43,6 +44,17 @@ async function init({ commit, dispatch }, { isErrorExist = false } = {}) {
   }
 }
 
+function sendFormData({ getters }, { isCardPayment }) {
+  const data = mapFormDataForSending({
+    isCardPayment,
+    // in case of not is credit-card payment(cash)
+    valuesToRemove: Object.values(FORM_WIZARD_STEPS.CREDIT_CARD.FIELDS),
+    savedFormFields: getters.savedFormFields,
+    selectedPerformanceSchedules: getters.performanceSchedule,
+  });
+  console.info(data);
+}
+
 async function changePaymentType({ dispatch }, { type }) {
   await dispatch('setPaymentType', { type });
 }
@@ -79,4 +91,5 @@ export default {
   setPaymentType,
   changePaymentType,
   saveFormInfo,
+  sendFormData,
 };

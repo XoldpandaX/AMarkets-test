@@ -5,14 +5,13 @@
     @backward-click="handleBackwardClick"
     :init-values="savedFormFields"
     :is-backward-btn-active="isBackwardBtnAvailable"
-    :is-forward-btn-active="isForwardBtnAvailable"
     :current-step-name="currentStepName"
   >
     <form-fields-performances
       v-if="isFirstStep"
       :performances="theaterSchedule"
       :selected-performance-schedule="performanceSchedule"
-      @select="handleSelect"
+      @performance-select="handleSelect"
     />
     <form-fields-user-info
       v-if="isSecondStep"
@@ -84,18 +83,12 @@ export default {
     isStepFinal() {
       return this.totalSteps === this.currentStepIdx;
     },
-
-    // form nav btns availability
-    isForwardBtnAvailable() {
-      return false;
-      // return this.currentStepIdx === this.totalSteps;
-    },
     isBackwardBtnAvailable() {
       return !this.currentStepIdx > 0;
     },
   },
   methods: {
-    ...mapActions('schedule', ['setSelectedPerformanceId', 'saveFormInfo']),
+    ...mapActions('schedule', ['setSelectedPerformanceId', 'saveFormInfo', 'sendFormData']),
 
     // INIT methods
     initWizardStartIdx() {
@@ -124,7 +117,7 @@ export default {
 
       await this.saveFormInfo({
         formField: (
-          isString(value)
+          isString(value) && key !== FORM_WIZARD_STEPS.SCHEDULE.FIELDS.SCHEDULE
             ? { [key]: trimWhitespaces(value) }
             : { ...formField }
         ),
@@ -138,11 +131,12 @@ export default {
       this.isPaymentStepActive = paymentType === PAYMENT_TYPES.CREDIT_CARD;
       this.initWizardSteps();
     },
-    async handleSubmit(formValues) {
+    async handleSubmit() {
       if (!this.isStepFinal) {
         this.stepForward();
+        await this.saveFormInfo({ currentStepIdx: this.currentStepIdx });
       } else {
-        console.info(formValues);
+        await this.sendFormData({ isCardPayment: this.isPaymentStepActive });
       }
     },
     async handleBackwardClick() {

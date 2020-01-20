@@ -12,7 +12,6 @@
         <slot /> <!-- place here form fields(inputs, textarea, date-pickers etc...) -->
         <form-wizard-nav-btns
           :is-backward-btn-active="isBackwardBtnActive"
-          :is-forward-btn-active="isForwardBtnActive"
           @backward-click="$emit('backward-click')"
         />
       </a-form>
@@ -41,14 +40,20 @@ export default {
   },
   props: {
     isBackwardBtnActive: VueTypes.bool.required,
-    isForwardBtnActive: VueTypes.bool.required,
     currentStepName: VueTypes.string.isRequired,
     initValues: VueTypes.object.def({}),
   },
   created() {
     this.form = this.$form.createForm(this, {
       name: 'wizard',
-      onValuesChange: (props, value) => this.$emit('field-value-change', value),
+      onValuesChange: (props, value) => {
+        this.$emit('field-value-change', value);
+
+        // Back schedule to default if performance was changed
+        if (Object.keys(value)[0] === FORM_WIZARD_STEPS.SCHEDULE.FIELDS.PERFORMANCE) {
+          props.form.resetFields([FORM_WIZARD_STEPS.SCHEDULE.FIELDS.SCHEDULE]);
+        }
+      },
     });
   },
   async mounted() {

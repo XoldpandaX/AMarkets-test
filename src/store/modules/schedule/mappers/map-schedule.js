@@ -1,15 +1,15 @@
 import get from 'lodash.get';
 import pick from 'lodash.pick';
 
-const combineGenres = (genresArr = []) => (
-  genresArr.length
-    ? genresArr.reduce((acc, nextGenre) => (
-      `${acc} ${nextGenre}`
-    ), '')
-    : ''
-);
+export default function ({ performances = [], sessions = [] }) {
+  const combineGenres = (genresArr = []) => (
+    genresArr.length
+      ? genresArr.reduce((acc, nextGenre) => (
+        `${acc} ${nextGenre}`
+      ), '')
+      : ''
+  );
 
-export function mapSchedule({ performances = [], sessions = [] }) {
   return performances.reduce((acc, nextPerformance) => {
     const relatedPerfSessions = sessions.filter((session) => {
       const sessionId = get(

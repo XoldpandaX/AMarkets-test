@@ -11,7 +11,6 @@
     <a-button
       type="primary"
       html-type="submit"
-      :disabled="isForwardBtnActive"
     >
       Вперёд
       <a-icon type="right" />
@@ -32,7 +31,6 @@ export default {
   },
   props: {
     isBackwardBtnActive: VueTypes.bool.required,
-    isForwardBtnActive: VueTypes.bool.required,
   },
 };
 </script>
