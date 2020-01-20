@@ -60,6 +60,12 @@ export default {
     performances: VueTypes.arrayOf(VueTypes.object).def([]),
     selectedPerformanceSchedule: VueTypes.arrayOf(VueTypes.object).def([]),
   },
+  data() {
+    return {
+      performance: '',
+      schedule: '',
+    };
+  },
   computed: {
     isScheduleExist() {
       return this.selectedPerformanceSchedule.length;

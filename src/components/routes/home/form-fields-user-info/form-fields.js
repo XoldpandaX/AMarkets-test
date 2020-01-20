@@ -85,7 +85,7 @@ export default {
       formItemLayout: datePickerSizes,
       dateFormat: 'DD-MM-YYYY',
       decorator: [
-        'date-picker',
+        'birthDate',
         {
           rules: [
             { type: 'object', required: true, message: 'Выбирите дату рождения !' },
@@ -98,7 +98,7 @@ export default {
       type: 'select',
       placeholder: 'Тип оплаты',
       decorator: [
-        'select',
+        'paymentType',
         {
           rules: [
             { required: true, message: 'Выбирите тип оплаты !' },

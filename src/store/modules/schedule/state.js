@@ -1,8 +1,11 @@
 export default {
   theaterSchedule: null,
   selectedPerformanceId: '',
-  initWizardStepIdxIdx: 0,
+  initWizardStepIdx: 0,
   isInitDataLoading: false,
   isCardPayment: false,
   paymentType: '',
+
+  // this fields are needed for save data, and send it to localstorage
+  formFields: {},
 };

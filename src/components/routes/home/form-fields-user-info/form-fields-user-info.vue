@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import VueTypes from 'vue-types';
 import formFields from './form-fields';
 
 import FormInputFields from './form-input-fields.vue';
@@ -23,15 +24,9 @@ export default {
     FormInputFields,
     FormTailFields,
   },
-  created() {
-    this.form = this.$form.createForm(this, { name: 'coordinated' });
+  props: {
+    initValues: VueTypes.object.def({}),
   },
-  // this is solution for set default value to fields
-  // mounted() {
-  //   this.$nextTick(() => {
-  //     this.form.setFieldsValue({ username: 'suka' });
-  //   });
-  // },
   data() {
     return {
       formLayout: 'horizontal',
@@ -44,14 +39,6 @@ export default {
     },
   },
   methods: {
-    handleSubmit(e) {
-      e.preventDefault();
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values);
-        }
-      });
-    },
     handlePaymentChange(paymentType) {
       this.$emit('payment-change', paymentType);
     },

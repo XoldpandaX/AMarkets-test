@@ -1,3 +1,5 @@
+import { FORM_WIZARD_STEPS } from '@/constants';
+
 const commonSizes = {
   labelCol: {
     xs: { span: 24 },
@@ -18,7 +20,7 @@ export default {
       label: 'Спектакль',
       placeholder: 'Выбирите спектакль',
       decorator: [
-        'performance',
+        FORM_WIZARD_STEPS.SCHEDULE.FIELDS.PERFORMANCE,
         {
           rules: [
             {
@@ -35,7 +37,7 @@ export default {
       label: 'Расписание',
       placeholder: 'Выбирите расписание',
       decorator: [
-        'schedule',
+        FORM_WIZARD_STEPS.SCHEDULE.FIELDS.SCHEDULE,
         {
           rules: [
             {

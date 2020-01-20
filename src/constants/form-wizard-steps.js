@@ -1,14 +1,23 @@
 export default {
   SCHEDULE: {
     NAME: 'SCHEDULE',
-    INDEX: 0,
+    FIELDS: {
+      PERFORMANCE: 'performance',
+      SCHEDULE: 'schedule',
+    },
   },
   USER_INFO: {
     NAME: 'USER_INFO',
-    INDEX: 1,
+    FIELDS: {
+      USERNAME: 'username',
+      SURNAME: 'surname',
+      EMAIL: 'email',
+      BIRTH_DATE: 'birthDate',
+      PAYMENT_TYPE: 'paymentType',
+      AGREEMENT: 'agreement',
+    },
   },
   CREDIT_CARD: {
     NAME: 'CREDIT_CARD',
-    INDEX: 2,
   },
 };

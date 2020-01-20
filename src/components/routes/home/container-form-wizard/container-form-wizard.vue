@@ -1,9 +1,12 @@
 <template>
   <form-wizard
     @form-submit="handleSubmit"
+    @field-value-change="throttledHandleValueChange"
     @backward-click="handleBackwardClick"
+    :init-values="savedFormFields"
     :is-backward-btn-active="isBackwardBtnAvailable"
     :is-forward-btn-active="isForwardBtnAvailable"
+    :current-step-name="currentStepName"
   >
     <form-fields-performances
       v-if="isFirstStep"
@@ -21,6 +24,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import throttle from 'lodash.throttle';
 import { FORM_WIZARD_STEPS, PAYMENT_TYPES } from '@/constants';
 
 import { FormFieldsUserInfo } from '../form-fields-user-info';
@@ -38,7 +42,9 @@ export default {
   },
   created() {
     // check for saved payment card prop from store
-    this.initWizardStepIdx();
+    this.throttledHandleValueChange = throttle(this.handleValueChange, 700);
+    this.initWizardStartIdx();
+    this.initWizardSteps();
   },
   data() {
     return {
@@ -48,7 +54,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('schedule', ['theaterSchedule', 'performanceSchedule']),
+    ...mapGetters('schedule', [
+      'theaterSchedule',
+      'performanceSchedule',
+      'savedFormFields',
+      'startWizardIdx',
+    ]),
 
     currentStepName() {
       return this.wizardSteps[this.currentStepIdx].NAME;
@@ -76,15 +87,20 @@ export default {
     },
   },
   methods: {
-    ...mapActions('schedule', ['setSelectedPerformanceId']),
+    ...mapActions('schedule', ['setSelectedPerformanceId', 'saveFormInfo']),
 
-    initWizardStepIdx() {
+    // INIT methods
+    initWizardStartIdx() {
+      this.currentStepIdx = this.startWizardIdx;
+    },
+    initWizardSteps() {
       const stepKeys = Object.values(FORM_WIZARD_STEPS);
 
       this.wizardSteps = this.isPaymentStepActive
         ? stepKeys
         : stepKeys.filter(({ NAME }) => NAME !== FORM_WIZARD_STEPS.CREDIT_CARD.NAME);
     },
+    // HANDLER methods
     stepForward() {
       if (this.currentStepIdx < this.totalSteps) {
         this.currentStepIdx += 1;
@@ -95,19 +111,27 @@ export default {
         this.currentStepIdx -= 1;
       }
     },
+    async handleValueChange(formField) {
+      await this.saveFormInfo({
+        formField,
+        currentStepIdx: this.currentStepIdx,
+      });
+    },
     async handleSelect(performanceId) {
       await this.setSelectedPerformanceId({ performanceId });
     },
     async handlePaymentChange(paymentType) {
       this.isPaymentStepActive = paymentType === PAYMENT_TYPES.CREDIT_CARD;
-      this.initWizardStepIdx();
+      this.initWizardSteps();
     },
     async handleSubmit(formValues) {
       console.info(formValues);
       this.stepForward();
+      await this.saveFormInfo({ currentStepIdx: this.currentStepIdx });
     },
     async handleBackwardClick() {
       this.stepBackward();
+      await this.saveFormInfo({ currentStepIdx: this.currentStepIdx });
     },
   },
 };

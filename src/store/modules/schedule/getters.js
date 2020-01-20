@@ -8,8 +8,8 @@ export default {
       ? theaterSchedule.filter(({ id }) => selectedPerformanceId === id)[0].sessions
       : []
   ),
-  initWizardStepIdxIdxIdx: ({ initWizardStepIdxIdx }) => initWizardStepIdxIdx,
-  wizardStepsQuantity: ({ wizardStepsQuantity }) => wizardStepsQuantity,
+  savedFormFields: ({ formFields }) => formFields,
+  startWizardIdx: ({ initWizardStepIdx }) => initWizardStepIdx,
 
   // predicates
   isInitDataLoading: ({ isInitDataLoading }) => isInitDataLoading,

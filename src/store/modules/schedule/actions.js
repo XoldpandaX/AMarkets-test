@@ -1,3 +1,4 @@
+import get from 'lodash.get';
 import * as mutationTypes from './mutation-types';
 import { getPerformances, getSessions } from './services';
 import { mapSchedule } from './mappers';
@@ -24,8 +25,17 @@ async function fetchTheaterSchedule({ commit }, { isErrorExist = false } = {}) {
 async function init({ commit, dispatch }, { isErrorExist = false } = {}) {
   try {
     await dispatch('fetchTheaterSchedule', { isErrorExist });
-    // TODO: have to add logic to define init step, if data previously was saved
-    commit(mutationTypes.SET_WIZARD_STEP, { step: 0 });
+
+    const saveFormData = JSON.parse(localStorage.getItem('wizardForm'));
+    if (saveFormData) {
+      const startStepIdx = get(saveFormData, 'currentStepIdx', 0);
+      // To know is third step(credit card details) is available
+      const startPaymentType = get(saveFormData, 'paymentType', '');
+
+      commit(mutationTypes.SET_PAYMENT_TYPE, { type: startPaymentType });
+      commit(mutationTypes.SET_WIZARD_STEP, { step: startStepIdx });
+      commit(mutationTypes.SET_DEDICATED_FORM_FIELD, { formField: { ...saveFormData } });
+    }
   } catch (e) {
     console.error(e, 'error while init');
   }
@@ -47,6 +57,15 @@ function setSelectedPerformanceId({ commit }, { performanceId }) {
   commit(mutationTypes.SET_SELECTED_PERFORMANCE_ID, { performanceId });
 }
 
+// save form fields and current wizard step
+function saveFormInfo({ commit, getters }, { formField = {}, currentStepIdx }) {
+  commit(mutationTypes.SET_DEDICATED_FORM_FIELD, {
+    formField: { ...formField, currentStepIdx },
+  });
+
+  localStorage.setItem('wizardForm', JSON.stringify(getters.savedFormFields));
+}
+
 export default {
   fetchTheaterSchedule,
   init: withLoader({
@@ -57,4 +76,5 @@ export default {
   setSelectedPerformanceId,
   setPaymentType,
   changePaymentType,
+  saveFormInfo,
 };

@@ -11,9 +11,12 @@ export default {
     state.selectedPerformanceId = performanceId;
   },
   [mutationTypes.SET_WIZARD_STEP](state, { step }) {
-    state.initWizardStepIdxIdx = step;
+    state.initWizardStepIdx = step;
   },
   [mutationTypes.SET_PAYMENT_TYPE](state, { type }) {
     state.paymentType = type;
+  },
+  [mutationTypes.SET_DEDICATED_FORM_FIELD](state, { formField }) {
+    state.formFields = { ...state.formFields, ...formField };
   },
 };
