@@ -31,8 +31,10 @@ async function init({ commit, dispatch }, { isErrorExist = false } = {}) {
       const startStepIdx = get(saveFormData, 'currentStepIdx', 0);
       // To know is third step(credit card details) is available
       const startPaymentType = get(saveFormData, 'paymentType', '');
+      const startPerformanceId = get(saveFormData, 'performance', '');
 
       commit(mutationTypes.SET_PAYMENT_TYPE, { type: startPaymentType });
+      commit(mutationTypes.SET_SELECTED_PERFORMANCE_ID, { performanceId: startPerformanceId });
       commit(mutationTypes.SET_WIZARD_STEP, { step: startStepIdx });
       commit(mutationTypes.SET_DEDICATED_FORM_FIELD, { formField: { ...saveFormData } });
     }

@@ -1,4 +1,6 @@
-import { PAYMENT_TYPES } from '@/constants';
+import { PAYMENT_TYPES, FORM_WIZARD_STEPS } from '@/constants';
+
+const { FIELDS } = FORM_WIZARD_STEPS.USER_INFO;
 
 const commonSizes = {
   labelCol: {
@@ -37,11 +39,13 @@ export default {
       placeholder: 'Ваше имя',
       formItemLayout: commonSizes,
       decorator: [
-        'username',
+        FIELDS.USERNAME,
         {
           rules: [
             { required: true, message: 'Ваше имя пожалуйста !' },
             { min: 2, message: 'Не меньше двух символов' },
+            { pattern: /[а-яА-Я]+/g, message: 'Только кирилица' },
+            { whitespace: true },
           ],
         },
       ],
@@ -52,11 +56,13 @@ export default {
       placeholder: 'Ваша фамилия',
       formItemLayout: commonSizes,
       decorator: [
-        'surname',
+        FIELDS.LAST_NAME,
         {
           rules: [
             { required: true, message: 'Ваша фамилия пожалуйста !' },
             { min: 2, message: 'Не меньше двух символов' },
+            { pattern: /[а-яА-Я]+/g, message: 'Только кирилица' },
+            { whitespace: true },
           ],
         },
       ],
@@ -67,11 +73,12 @@ export default {
       placeholder: 'Ваша электронная почта',
       formItemLayout: commonSizes,
       decorator: [
-        'email',
+        FIELDS.EMAIL,
         {
           rules: [
             { type: 'email', message: 'Неправильный формат почты !' },
             { required: true, message: 'Ваша электронная почта пожалуйста !' },
+            { whitespace: true },
           ],
         },
       ],
@@ -85,7 +92,7 @@ export default {
       formItemLayout: datePickerSizes,
       dateFormat: 'DD-MM-YYYY',
       decorator: [
-        'birthDate',
+        FIELDS.BIRTHDAY,
         {
           rules: [
             { type: 'object', required: true, message: 'Выбирите дату рождения !' },
@@ -98,7 +105,7 @@ export default {
       type: 'select',
       placeholder: 'Тип оплаты',
       decorator: [
-        'paymentType',
+        FIELDS.PAYMENT_TYPE,
         {
           rules: [
             { required: true, message: 'Выбирите тип оплаты !' },
@@ -129,11 +136,19 @@ export default {
       beforeDescription: 'С',
       afterDescription: 'ознакомлен',
       decorator: [
-        'agreement',
+        FIELDS.AGREEMENT,
         {
           valuePropName: 'checked',
           rules: [
-            { required: true, message: 'Примите соглашение' },
+            {
+              validator: (rule, val, callback) => {
+                if (!val) {
+                  callback('Примите соглашение');
+                } else {
+                  callback();
+                }
+              },
+            },
           ],
         },
       ],

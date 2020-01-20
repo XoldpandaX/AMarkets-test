@@ -27,6 +27,7 @@ import isEmpty from 'lodash.isempty';
 import { Form } from 'ant-design-vue';
 import userInfoFormFields from '../form-fields-user-info/form-fields';
 import performancesFormFields from '../form-fields-performances/form-fields';
+import cardPaymentFormFields from '../form-fields-card-payment/form-fields';
 import { FORM_WIZARD_STEPS } from '@/constants';
 import { getSavedfieldsForStep } from '@/utils';
 
@@ -71,7 +72,7 @@ export default {
       const formValues = {
         [FORM_WIZARD_STEPS.SCHEDULE.NAME]: performancesFormFields.fields,
         [FORM_WIZARD_STEPS.USER_INFO.NAME]: userInfoFormFields,
-        [FORM_WIZARD_STEPS.CREDIT_CARD.NAME]: '',
+        [FORM_WIZARD_STEPS.CREDIT_CARD.NAME]: cardPaymentFormFields,
       };
 
       return getSavedfieldsForStep(formValues[this.currentStepName], this.initValues);
@@ -85,7 +86,7 @@ export default {
           .forEach(([key, val]) => (this.form.setFieldsValue({
             // it's important to format date in to moment format because of the ant design lib
             // see https://www.antdv.com/components/date-picker/ DatePicker - defaultValue prop
-            [key]: key === 'birthDate' ? moment(val) : val,
+            [key]: key === FORM_WIZARD_STEPS.USER_INFO.FIELDS.BIRTHDAY ? moment(val) : val,
           })));
       }
     },

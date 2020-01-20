@@ -25,7 +25,9 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import throttle from 'lodash.throttle';
+import isString from 'lodash.isstring';
 import { FORM_WIZARD_STEPS, PAYMENT_TYPES } from '@/constants';
+import { trimWhitespaces } from '@/utils';
 
 import { FormFieldsUserInfo } from '../form-fields-user-info';
 import { FormWizard } from '../form-wizard';
@@ -43,6 +45,7 @@ export default {
   created() {
     // check for saved payment card prop from store
     this.throttledHandleValueChange = throttle(this.handleValueChange, 700);
+    this.isPaymentStepActive = this.isCardPayment;
     this.initWizardStartIdx();
     this.initWizardSteps();
   },
@@ -59,6 +62,7 @@ export default {
       'performanceSchedule',
       'savedFormFields',
       'startWizardIdx',
+      'isCardPayment',
     ]),
 
     currentStepName() {
@@ -77,10 +81,14 @@ export default {
       // for easy comparing with arr index which starts from 0
       return this.wizardSteps.length - 1;
     },
+    isStepFinal() {
+      return this.totalSteps === this.currentStepIdx;
+    },
 
     // form nav btns availability
     isForwardBtnAvailable() {
-      return this.currentStepIdx === this.totalSteps;
+      return false;
+      // return this.currentStepIdx === this.totalSteps;
     },
     isBackwardBtnAvailable() {
       return !this.currentStepIdx > 0;
@@ -112,8 +120,14 @@ export default {
       }
     },
     async handleValueChange(formField) {
+      const [key, value] = Object.entries(formField)[0];
+
       await this.saveFormInfo({
-        formField,
+        formField: (
+          isString(value)
+            ? { [key]: trimWhitespaces(value) }
+            : { ...formField }
+        ),
         currentStepIdx: this.currentStepIdx,
       });
     },
@@ -125,9 +139,11 @@ export default {
       this.initWizardSteps();
     },
     async handleSubmit(formValues) {
-      console.info(formValues);
-      this.stepForward();
-      await this.saveFormInfo({ currentStepIdx: this.currentStepIdx });
+      if (!this.isStepFinal) {
+        this.stepForward();
+      } else {
+        console.info(formValues);
+      }
     },
     async handleBackwardClick() {
       this.stepBackward();
