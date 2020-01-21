@@ -19,9 +19,6 @@ export default {
   [mutationTypes.SET_DEDICATED_FORM_FIELD](state, { formField }) {
     state.formFields = { ...state.formFields, ...formField };
   },
-  [mutationTypes.RESET_STATE](state) {
-    console.info(state);
-  },
   [mutationTypes.SET_FORM_SENDING_LOADING_STATUS](state, { status }) {
     state.isFormDataSending = status;
   },

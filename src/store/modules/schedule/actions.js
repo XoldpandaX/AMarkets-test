@@ -113,11 +113,6 @@ function saveFormInfo({ commit, getters }, { formField = {}, currentStepIdx }) {
   localStorage.setItem(LOCAL_STORAGE.WIZARD_FORM_KEY, JSON.stringify(getters.savedFormFields));
 }
 
-function resetSavedData({ commit }) {
-  console.info(commit);
-  localStorage.removeItem(LOCAL_STORAGE.WIZARD_FORM_KEY);
-}
-
 export default {
   fetchTheaterSchedule,
   init: withLoader({
@@ -133,6 +128,5 @@ export default {
   setPaymentType,
   changePaymentType,
   saveFormInfo,
-  resetSavedData,
   changeFormLoadingStatus,
 };
