@@ -5,7 +5,6 @@
       :key="notification.id"
       :type="notification.type"
       :id="notification.id"
-      @close-click="closeNotification"
     >
       {{ notification.text }}
     </app-notification>
@@ -29,6 +28,7 @@ export default {
     ...mapActions('common', ['removeNotification']),
 
     async closeNotification(id) {
+      console.info(id);
       await this.removeNotification({ id });
     },
   },

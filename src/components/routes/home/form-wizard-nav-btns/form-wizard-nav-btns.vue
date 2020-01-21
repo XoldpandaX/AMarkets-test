@@ -2,7 +2,7 @@
   <div class="form-wizard-nav-btns">
     <a-button
       type="primary"
-      :disabled="isBackwardBtnActive"
+      :disabled="isBackwardBtnActive || isForwardBtnLoading"
       @click="$emit('backward-click')"
     >
       <a-icon type="left" />

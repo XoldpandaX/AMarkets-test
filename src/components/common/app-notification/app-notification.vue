@@ -1,9 +1,5 @@
 <template>
   <div :class="rootClasses">
-    <button
-      class="notification__close"
-      @click="handleClick"
-    />
     <slot /> <!-- place text here -->
   </div>
 </template>
@@ -28,11 +24,6 @@ export default {
       const base = 'notification';
 
       return [base, `${base}--${this.type}`];
-    },
-  },
-  methods: {
-    handleClick() {
-      this.$emit('close-click', { id: this.id });
     },
   },
 };

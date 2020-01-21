@@ -2,7 +2,7 @@ import get from 'lodash.get';
 import * as mutationTypes from './mutation-types';
 import { FORM_WIZARD_STEPS, LOCAL_STORAGE } from '@/constants';
 import { getPerformances, getSessions, sendFormToServer } from './services';
-import { mapSchedule, mapFormDataForSending } from './mappers';
+import { mapSchedule, mapFormDataForSending, constructRespFormErrorMsg } from './mappers';
 import { withLoader } from '@/utils';
 
 async function fetchTheaterSchedule({ commit }, { isErrorExist = false } = {}) {
@@ -44,9 +44,9 @@ async function init({ commit, dispatch }, { isErrorExist = false } = {}) {
   }
 }
 
-async function sendFormData({ getters }, { isCardPayment, isSuccessError }) {
+async function sendFormData({ getters, dispatch }, { isCardPayment, isSuccessError }) {
   try {
-    const data = mapFormDataForSending({
+    const postData = mapFormDataForSending({
       isCardPayment,
       // in case of not is credit-card payment(cash)
       valuesToRemove: Object.values(FORM_WIZARD_STEPS.CREDIT_CARD.FIELDS),
@@ -54,8 +54,17 @@ async function sendFormData({ getters }, { isCardPayment, isSuccessError }) {
       selectedPerformanceSchedules: getters.performanceSchedule,
     });
 
-    const { success } = await sendFormToServer({ isSuccessError, postData: data });
-    console.info(success);
+    const response = await sendFormToServer({ isSuccessError, postData });
+
+    if (!response.success) {
+      const errorText = constructRespFormErrorMsg({ response });
+
+      dispatch(
+        'common/addNotification',
+        { type: 'danger', text: errorText },
+        { root: true },
+      );
+    }
     // await dispatch('resetSavedData');
   } catch (e) {
     console.error(e, 'error while sendFormData');
