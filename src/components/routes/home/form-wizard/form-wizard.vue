@@ -16,6 +16,7 @@
         </transition>
         <form-wizard-nav-btns
           :is-backward-btn-active="isBackwardBtnActive"
+          :is-forward-btn-loading="isFormSending"
           @backward-click="$emit('backward-click')"
         />
       </a-form>
@@ -48,6 +49,7 @@ export default {
     isBackwardBtnActive: VueTypes.bool.required,
     currentStepName: VueTypes.string.isRequired,
     initValues: VueTypes.object.def({}),
+    isFormSending: VueTypes.bool.def(false),
   },
   created() {
     this.form = this.$form.createForm(this, {

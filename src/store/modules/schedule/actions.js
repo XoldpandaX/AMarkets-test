@@ -1,7 +1,7 @@
 import get from 'lodash.get';
 import * as mutationTypes from './mutation-types';
 import { FORM_WIZARD_STEPS, LOCAL_STORAGE } from '@/constants';
-import { getPerformances, getSessions } from './services';
+import { getPerformances, getSessions, sendFormToServer } from './services';
 import { mapSchedule, mapFormDataForSending } from './mappers';
 import { withLoader } from '@/utils';
 
@@ -44,16 +44,22 @@ async function init({ commit, dispatch }, { isErrorExist = false } = {}) {
   }
 }
 
-async function sendFormData({ getters, dispatch }, { isCardPayment }) {
-  const data = mapFormDataForSending({
-    isCardPayment,
-    // in case of not is credit-card payment(cash)
-    valuesToRemove: Object.values(FORM_WIZARD_STEPS.CREDIT_CARD.FIELDS),
-    savedFormFields: getters.savedFormFields,
-    selectedPerformanceSchedules: getters.performanceSchedule,
-  });
-  console.info(data);
-  await dispatch('resetSavedData');
+async function sendFormData({ getters }, { isCardPayment, isSuccessError }) {
+  try {
+    const data = mapFormDataForSending({
+      isCardPayment,
+      // in case of not is credit-card payment(cash)
+      valuesToRemove: Object.values(FORM_WIZARD_STEPS.CREDIT_CARD.FIELDS),
+      savedFormFields: getters.savedFormFields,
+      selectedPerformanceSchedules: getters.performanceSchedule,
+    });
+
+    const { success } = await sendFormToServer({ isSuccessError, postData: data });
+    console.info(success);
+    // await dispatch('resetSavedData');
+  } catch (e) {
+    console.error(e, 'error while sendFormData');
+  }
 }
 
 async function changePaymentType({ dispatch }, { type }) {
@@ -66,6 +72,10 @@ function setPaymentType({ commit }, { type }) {
 
 function handleInitLoading({ commit }, { status }) {
   commit(mutationTypes.SET_INIT_LOADING_STATUS, { status });
+}
+
+function changeFormLoadingStatus({ commit }, { status }) {
+  commit(mutationTypes.SET_FORM_SENDING_LOADING_STATUS, { status });
 }
 
 function setSelectedPerformanceId({ commit }, { performanceId }) {
@@ -92,11 +102,15 @@ export default {
     func: init,
     loadingAffectAction: 'schedule/handleInitLoading',
   }),
+  sendFormData: withLoader({
+    func: sendFormData,
+    loadingAffectAction: 'schedule/changeFormLoadingStatus',
+  }),
   handleInitLoading,
   setSelectedPerformanceId,
   setPaymentType,
   changePaymentType,
   saveFormInfo,
-  sendFormData,
   resetSavedData,
+  changeFormLoadingStatus,
 };

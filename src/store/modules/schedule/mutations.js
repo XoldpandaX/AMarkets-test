@@ -22,4 +22,7 @@ export default {
   [mutationTypes.RESET_STATE](state) {
     console.info(state);
   },
+  [mutationTypes.SET_FORM_SENDING_LOADING_STATUS](state, { status }) {
+    state.isFormDataSending = status;
+  },
 };

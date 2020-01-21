@@ -5,6 +5,7 @@
     @backward-click="handleBackwardClick"
     :init-values="savedFormFields"
     :is-backward-btn-active="isBackwardBtnAvailable"
+    :is-form-sending="isFormDataSending"
     :current-step-name="currentStepName"
   >
     <form-fields-performances
@@ -62,6 +63,7 @@ export default {
       'savedFormFields',
       'startWizardIdx',
       'isCardPayment',
+      'isFormDataSending',
     ]),
 
     currentStepName() {
@@ -136,7 +138,10 @@ export default {
         this.stepForward();
         await this.saveFormInfo({ currentStepIdx: this.currentStepIdx });
       } else {
-        await this.sendFormData({ isCardPayment: this.isPaymentStepActive });
+        await this.sendFormData({
+          isCardPayment: this.isPaymentStepActive,
+          isSuccessError: true,
+        });
       }
     },
     async handleBackwardClick() {

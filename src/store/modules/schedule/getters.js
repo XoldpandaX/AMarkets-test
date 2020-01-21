@@ -11,7 +11,7 @@ export default {
   savedFormFields: ({ formFields }) => formFields,
   startWizardIdx: ({ initWizardStepIdx }) => initWizardStepIdx,
 
-  // predicates
+  isFormDataSending: ({ isFormDataSending }) => isFormDataSending,
   isInitDataLoading: ({ isInitDataLoading }) => isInitDataLoading,
   isCardPayment: ({ paymentType }) => paymentType === PAYMENT_TYPES.CREDIT_CARD,
 };

@@ -1,6 +1,11 @@
 import * as responseData from './data';
 
-export default function ({ endpoint, requestType, isErrorExist = false }) {
+export default function ({
+  endpoint,
+  requestType,
+  isErrorExist = false,
+  isSuccessError = false,
+}) {
   const getDataByEndpoint = {
     'api/performances': responseData.performances,
     'api/sessions': responseData.sessions,
@@ -11,6 +16,10 @@ export default function ({ endpoint, requestType, isErrorExist = false }) {
   };
 
   if (isErrorExist) {
+    return responseData.error;
+  }
+
+  if (isSuccessError) {
     return responseData.error;
   }
 

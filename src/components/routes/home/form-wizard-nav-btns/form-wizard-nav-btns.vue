@@ -11,6 +11,7 @@
     <a-button
       type="primary"
       html-type="submit"
+      :loading="isForwardBtnLoading"
     >
       Вперёд
       <a-icon type="right" />
@@ -30,7 +31,8 @@ export default {
     AIcon: Icon,
   },
   props: {
-    isBackwardBtnActive: VueTypes.bool.required,
+    isBackwardBtnActive: VueTypes.bool.def(true),
+    isForwardBtnLoading: VueTypes.bool.def(false),
   },
 };
 </script>
