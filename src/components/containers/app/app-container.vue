@@ -1,5 +1,8 @@
 <template>
-  <app :is-app-available="!isInitDataLoading" />
+  <div>
+    <app :is-app-available="!isInitDataLoading" />
+    <button @click="a">notify</button>
+  </div>
 </template>
 
 <script>
@@ -20,6 +23,21 @@ export default {
   },
   methods: {
     ...mapActions('schedule', ['init']),
+    ...mapActions('common', ['addNotification']),
+
+    async a() {
+      await this.addNotification({
+        type: 'warning',
+        text: `
+        you have a lot of errors
+        1 - to short name
+        2 - expired card date
+        3 - not your name
+        4 - email exist
+        5 - you should check your password
+        `,
+      });
+    },
   },
 };
 </script>

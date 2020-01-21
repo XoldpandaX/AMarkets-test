@@ -7,6 +7,7 @@
     >
       <a-spin size="large" />
     </div>
+    <notifications-container />
   </div>
 </template>
 
@@ -14,11 +15,13 @@
 import VueTypes from 'vue-types';
 
 import { Spin } from 'ant-design-vue';
+import { NotificationsContainer } from '../containers/notifications';
 
 export default {
   name: 'app',
   components: {
     ASpin: Spin,
+    NotificationsContainer,
   },
   props: {
     isAppAvailable: VueTypes.bool.def(false),

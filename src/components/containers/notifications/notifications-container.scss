@@ -1,0 +1,15 @@
+@import 'src/assets/styles/base/variables';
+
+.notifications-container {
+  position: fixed;
+  z-index: 1000000;
+
+  &--right-top {
+    top: 10px;
+    right: 50px;
+
+    @media (max-width: $tablet) {
+      right: 10px;
+    }
+  }
+}

@@ -1,3 +1,3 @@
 export default {
-  globalLoader: ({ isGlobalLoaderActive }) => isGlobalLoaderActive,
+  notifications: state => state.notifications,
 };

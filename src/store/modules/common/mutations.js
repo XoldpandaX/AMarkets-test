@@ -1,7 +1,15 @@
 import * as mutationTypes from './mutation-types';
 
 export default {
-  [mutationTypes.SET_THEATER_SCHEDULE](state, { theaterSchedule }) {
-    state.d = theaterSchedule;
+  [mutationTypes.ADD_NOTIFICATION](state, { type, text, id }) {
+    state.notifications.push({
+      type,
+      text,
+      id,
+    });
+  },
+
+  [mutationTypes.REMOVE_NOTIFICATION](state, { index }) {
+    state.notifications.splice(index, 1);
   },
 };
