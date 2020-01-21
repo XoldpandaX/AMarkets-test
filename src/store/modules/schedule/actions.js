@@ -45,7 +45,6 @@ async function init({ commit, dispatch }, { isErrorExist = false } = {}) {
 }
 
 async function sendFormData({ getters, dispatch }, { isCardPayment, isSuccessError }) {
-  console.info(isSuccessError);
   try {
     const postData = mapFormDataForSending({
       isCardPayment,
