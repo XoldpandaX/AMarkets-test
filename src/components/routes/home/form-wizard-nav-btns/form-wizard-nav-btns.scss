@@ -1,6 +1,22 @@
+@import 'src/assets/styles/base/variables';
+
 .form-wizard-nav-btns {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-top: 12%;
+
+  @media (max-width: $tablet) {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+
+    /deep/ .ant-btn {
+      width: 54px;
+
+      span {
+        display: none;
+      }
+    }
+  }
 }

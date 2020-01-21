@@ -1,5 +1,5 @@
 <template>
-  <app :is-init-active="!isInitDataLoading" />
+  <app :is-app-available="!isInitDataLoading" />
 </template>
 
 <script>

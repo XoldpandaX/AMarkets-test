@@ -2,10 +2,9 @@
 
 .form-wizard {
   display: flex;
-  // align-items: center; undefined need or not
   min-height: 420px;
 
-  @media (max-width: 576px) {
+  @media (max-width: $tablet) {
     flex-direction: column;
   }
 
@@ -15,7 +14,7 @@
     width: 100%;
     padding-right: 3.5%;
 
-    @media (max-width: 576px) {
+    @media (max-width: $tablet) {
       max-width: 100%;
       margin-bottom: 15px;
     }
@@ -23,10 +22,71 @@
     &-description {
       margin-top: 15px;
       font-style: italic;
+
+      @media (max-width: $tablet) {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
     }
   }
 
-  &__forms {
+  &__form {
     flex: 1;
+
+    form {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  // style redefinitions of ant-lib form components
+  /deep/ .ant-form-item {
+    @media (max-width: $tablet) {
+      margin-bottom: 5px;
+    }
+
+    &-label {
+      padding-bottom: 0;
+    }
+  }
+
+  /deep/ .ant-form-explain {
+    font-size: 13px;
   }
 }
+
+.animated {
+  animation-duration: .3s;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation-name: fadeIn;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.fadeOut {
+  animation-name: fadeOut;
+}
+

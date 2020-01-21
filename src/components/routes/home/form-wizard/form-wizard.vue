@@ -1,13 +1,19 @@
 <template>
   <div class="form-wizard">
     <form-wizard-info :current-step-name="currentStepName" />
-    <div class="form-wizard__forms">
+    <div class="form-wizard__form">
       <a-form
         :form="form"
         :hide-required-mark="true"
         @submit="handleSubmit"
       >
-        <slot /> <!-- place here form fields(inputs, textarea, date-pickers etc...) -->
+        <transition
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+          mode="out-in"
+        >
+          <slot /> <!-- place here form fields(inputs, textarea, date-pickers etc...) -->
+        </transition>
         <form-wizard-nav-btns
           :is-backward-btn-active="isBackwardBtnActive"
           @backward-click="$emit('backward-click')"
@@ -26,7 +32,7 @@ import userInfoFormFields from '../form-fields-user-info/form-fields';
 import performancesFormFields from '../form-fields-performances/form-fields';
 import cardPaymentFormFields from '../form-fields-card-payment/form-fields';
 import { FORM_WIZARD_STEPS } from '@/constants';
-import { getSavedfieldsForStep } from '@/utils';
+import { getSavedfieldsForStep, waitFor } from '@/utils';
 
 import { FormWizardNavBtns } from '../form-wizard-nav-btns';
 import FormWizardInfo from './form-wizard-info.vue';
@@ -68,6 +74,8 @@ export default {
   watch: {
     async currentStepName() {
       await this.$nextTick();
+      // waiting form fields rendering, because of the fade animation duration -> form-wizard.scss
+      await waitFor(350);
       this.setFormInitValues();
     },
   },

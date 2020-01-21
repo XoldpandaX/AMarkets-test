@@ -1,20 +1,41 @@
 <template>
   <div class="form-wizard__info">
-    <h2>{{ infoByStep.title }}</h2>
-    <hr>
-    <p class="form-wizard__info-description">{{ infoByStep.description }}</p>
+    <transition-group name="slide-fade">
+      <template v-if="isShow">
+        <h2 key="f">{{ infoByStep.title }}</h2>
+        <hr key="m">
+        <p
+          key="g"
+          class="form-wizard__info-description"
+        >
+          {{ infoByStep.description }}
+        </p>
+      </template>
+    </transition-group>
   </div>
 </template>
 
 <script>
 import VueTypes from 'vue-types';
-
+import { waitFor } from '@/utils';
 import { FORM_WIZARD_STEPS } from '@/constants';
 
 export default {
   name: 'form-wizard-info',
   props: {
     currentStepName: VueTypes.string.isRequired,
+  },
+  data() {
+    return {
+      isShow: true,
+    };
+  },
+  watch: {
+    async currentStepName() {
+      this.isShow = false;
+      await waitFor(350);
+      this.isShow = true;
+    },
   },
   computed: {
     infoByStep() {
@@ -48,3 +69,16 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .slide-fade-enter, .slide-fade-leave-to {
+    transform: translateX(10px);
+    opacity: 0;
+  }
+</style>

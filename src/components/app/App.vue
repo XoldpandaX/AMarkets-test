@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view v-if="isInitActive" />
+    <router-view v-if="isAppAvailable" />
     <div
       class="app-spinner"
       v-else
@@ -21,7 +21,7 @@ export default {
     ASpin: Spin,
   },
   props: {
-    isInitActive: VueTypes.bool.def(false),
+    isAppAvailable: VueTypes.bool.def(false),
   },
 };
 </script>
