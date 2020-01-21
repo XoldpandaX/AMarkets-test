@@ -27,7 +27,7 @@ import { mapGetters, mapActions } from 'vuex';
 import throttle from 'lodash.throttle';
 import isString from 'lodash.isstring';
 import { FORM_WIZARD_STEPS, PAYMENT_TYPES } from '@/constants';
-import { trimWhitespaces } from '@/utils';
+import { trimWhitespaces, getRandomInt } from '@/utils';
 
 import { FormFieldsUserInfo } from '../form-fields-user-info';
 import { FormWizard } from '../form-wizard';
@@ -140,7 +140,7 @@ export default {
       } else {
         await this.sendFormData({
           isCardPayment: this.isPaymentStepActive,
-          isSuccessError: true,
+          isSuccessError: getRandomInt(2) !== 0,
         });
       }
     },

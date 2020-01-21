@@ -16,7 +16,7 @@ export function getSessions({ isErrorExist } = {}) {
   });
 }
 
-export function sendFormToServer({ isSuccessError, postData }) {
+export function sendFormToServer({ isSuccessError, postData } = {}) {
   return request({
     endpoint: 'api/orders',
     requestType: 'post',

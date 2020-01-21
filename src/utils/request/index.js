@@ -26,7 +26,6 @@ export default function ({
       camelcaseKeys,
       JSON.parse,
     )(endpointData);
-    console.info(camelCasedData);
 
     return !isErrorExist
       ? resolve(camelCasedData)

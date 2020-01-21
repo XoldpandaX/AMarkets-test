@@ -45,6 +45,7 @@ async function init({ commit, dispatch }, { isErrorExist = false } = {}) {
 }
 
 async function sendFormData({ getters, dispatch }, { isCardPayment, isSuccessError }) {
+  console.info(isSuccessError);
   try {
     const postData = mapFormDataForSending({
       isCardPayment,
@@ -59,13 +60,25 @@ async function sendFormData({ getters, dispatch }, { isCardPayment, isSuccessErr
     if (!response.success) {
       const errorText = constructRespFormErrorMsg({ response });
 
-      dispatch(
+      await dispatch(
         'common/addNotification',
         { type: 'danger', text: errorText },
         { root: true },
       );
+    } else {
+      // code below is just for demonstration, so don't take it seriously ;)
+      console.log(postData);
+      // eslint-disable-next-line no-restricted-globals
+      confirm(`
+      Вы отправили заполненные данные на сервер все ок! чтобы их просмотреть
+      откройте консоль брузера, после того как вы закроете это окно, начёнтся отсчёт времени
+      и все данные уничтожаться через 25 секунд
+    `);
+      setTimeout(() => {
+        localStorage.removeItem(LOCAL_STORAGE.WIZARD_FORM_KEY);
+        document.location.reload(true);
+      }, 15000);
     }
-    // await dispatch('resetSavedData');
   } catch (e) {
     console.error(e, 'error while sendFormData');
   }

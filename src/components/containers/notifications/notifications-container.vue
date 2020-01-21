@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 
 import { AppNotification } from '@/components/common/app-notification';
 
@@ -23,14 +23,6 @@ export default {
   },
   computed: {
     ...mapGetters('common', ['notifications']),
-  },
-  methods: {
-    ...mapActions('common', ['removeNotification']),
-
-    async closeNotification(id) {
-      console.info(id);
-      await this.removeNotification({ id });
-    },
   },
 };
 </script>
