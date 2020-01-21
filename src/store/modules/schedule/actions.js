@@ -72,7 +72,7 @@ async function sendFormData({ getters, dispatch }, { isCardPayment, isSuccessErr
       confirm(`
       Вы отправили заполненные данные на сервер все ок! чтобы их просмотреть
       откройте консоль брузера, после того как вы закроете это окно, начёнтся отсчёт времени
-      и все данные уничтожаться через 25 секунд
+      и все данные уничтожаться через 15 секунд
     `);
       setTimeout(() => {
         localStorage.removeItem(LOCAL_STORAGE.WIZARD_FORM_KEY);
