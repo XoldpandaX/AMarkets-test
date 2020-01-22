@@ -1,6 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import flowRight from 'lodash.flowright';
 import getEndpointData from './fake-REST/get-endpoint-data';
+import { CONFIG } from '@/constants';
 
 export default function ({
   endpoint,
@@ -8,7 +9,6 @@ export default function ({
   isErrorExist = false,
   isSuccessError,
 }) {
-  const timeToResponse = 1500;
   const endpointData = getEndpointData({
     endpoint,
     requestType,
@@ -30,5 +30,5 @@ export default function ({
     return !isErrorExist
       ? resolve(camelCasedData)
       : reject(new Error(errorMsgTransducer(camelCasedData)));
-  }, timeToResponse));
+  }, CONFIG.FAKE_REST_RESPONSE_TIME));
 }
