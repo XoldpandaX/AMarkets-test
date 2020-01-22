@@ -27,12 +27,6 @@ export default {
   props: {
     initValues: VueTypes.object.def({}),
   },
-  data() {
-    return {
-      formLayout: 'horizontal',
-      form: null,
-    };
-  },
   computed: {
     fieldsOfForm() {
       return formFields;
